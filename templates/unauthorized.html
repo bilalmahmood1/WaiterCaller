@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+      </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="container alert alert-danger">
+	<h1>Access Error <small>Login to access your application</h1>	
+</div>
+<div class="container">
+	<img class="img-responsive center-block" src="{{ url_for('static', filename='img/waiter.png') }}">
+</div>
+
+{% endblock %}

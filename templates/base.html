@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav1.ico') }}">
+    <title>Waiter Caller App</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    
+  </head>
+  <body>
+    {% block navbar %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
+          <a class="navbar-brand" href="/account"><span class="glyphicon glyphicon-edit"></span> Account</a>
+        </div>
+         
+         <ul class="nav navbar-nav navbar-right">
+            <li><a><span class="glyphicon glyphicon-user"></span> {{user}}</a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+         </ul>
+
+      </div>
+    </nav>
+    {% endblock %}
+    
+    {% block content %}
+    {% endblock %}
+
+    <hr>
+    <div class="container text-center">
+      <footer class="footer navbar-fixed-bottom">
+        <p>&copy; Waiter Caller Application 2018</p>
+      </footer>
+    </div> <!-- ./container -->
+      
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+  </body>
+</html>
+
