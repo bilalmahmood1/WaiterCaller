@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+	{% if table_number %}
+	    <div class="jumbotron">
+			<div class="container">
+				<h2>Your waiter will arrive on your table shortly!</h2>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4"> 
+					<img class="img-responsive" src="{{ url_for('static', filename='img/waiter.png') }}">
+				</div>
+				<div class="col-md-8">
+					<h4>I am on my way to your table which has a number: <i>{{table_number}}</i></h4>	
+				</div>
+				
+			</div>
+		</div>
+	{% else %}
+      <div class="jumbotron">
+		<div class="container">
+			<h2>Kindly add correct URL placed on your table!</h2>	
+		</div>
+   </div>
+{% endif %}
+
+{% endblock %}

@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -23,6 +24,10 @@ import config
 from passwordhelper import PasswordHelper as PHelper
 from helper import HelperLibrary 
 
+from bitlyhelper import BitlyHelper
+
+import datetime
+
 app = Flask(__name__)
 app.secret_key = 'ae+4YjO+l+GMTjsMPu+JNpFb4g55YbGgGSfIBt57mNWbiB/PF7kNGQQ4KCqiCkSrCAmVGMvku00GuJoMkFV3xTaAGA+5/f4Bqye'
 login_manager = LoginManager()
@@ -31,6 +36,11 @@ login_manager.init_app(app)
 DB = DBHelper()
 PH = PHelper()
 H = HelperLibrary()
+BH = BitlyHelper()
+
+## Target response time to resolve the request
+TARGET_RESPONSE = 300
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -53,8 +63,16 @@ def home():
 @app.route("/dashboard")
 @login_required
 def dashboard():
+    now = datetime.datetime.now()
+    requests = DB.get_requests(current_user.get_id())
+    for req in requests:
+        deltaseconds = (now - req['datetime']).seconds
+        req['wait_minutes'] = "{} minutes {} seconds".format((deltaseconds//60), str(deltaseconds % 60).zfill(2))
+        req['time_elapsed'] = min(int(100 * deltaseconds/TARGET_RESPONSE), 100)
     return render_template("dashboard.html",
-    					   user = current_user.get_id())
+    					   user = current_user.get_id(),
+                        calls = len(requests),
+                        requests = requests)
 
 @app.route("/account")
 @login_required
@@ -81,8 +99,6 @@ def login():
         ## Incorrect password
         else:
             return redirect(url_for('home'))
-
-    
     ## Please register
     else:
         return redirect(url_for('home'))
@@ -107,7 +123,6 @@ def register():
     return redirect(url_for('home'))
 
      
-    
 @app.route("/logout")
 def logout():
     logout_user()
@@ -120,7 +135,7 @@ def account_createtable():
     tablename = request.form.get("tablenumber")
     tableid = DB.add_table(tablename, current_user.get_id())
     new_url = config.base_url + "newrequest/" + str(tableid)
-    DB.update_table(tableid, new_url)
+    DB.update_table(tableid, BH.shorten_url(new_url))
     return redirect(url_for('account'))
 
 @app.route("/account/deletetable")
@@ -130,6 +145,26 @@ def account_deletetable():
     DB.delete_table(tableid)
     return redirect(url_for('account'))
 
+
+
+@app.route("/dashboard/resolve")
+@login_required
+def dashboard_resolve():
+    requestid = int(request.args.get("request_id"))
+    DB.delete_request(requestid)
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/newrequest/<tid>')
+def newrequest(tid):
+    table_id = int(tid)
+    table = DB.get_table_id(table_id)
+    table_number = table["number"]
+    table_owner = table["owner"]
+    time = datetime.datetime.now()
+    DB.add_request(table_id, time,table_number,table_owner)
+    return render_template("newrequest.html",
+                           table_number = table_number)
 
 if __name__ == '__main__':
     app.run(port = 5000, debug=True)

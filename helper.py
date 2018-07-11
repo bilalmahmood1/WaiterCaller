@@ -7,3 +7,4 @@ class HelperLibrary:
         return table_html.format(table_data)
     
                  
+
