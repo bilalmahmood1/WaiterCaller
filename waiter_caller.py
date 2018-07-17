@@ -23,9 +23,7 @@ from user import User
 import config
 from passwordhelper import PasswordHelper as PHelper
 from helper import HelperLibrary 
-
 from bitlyhelper import BitlyHelper
-
 import datetime
 
 app = Flask(__name__)
@@ -155,8 +153,10 @@ def dashboard_resolve():
     return redirect(url_for('dashboard'))
 
 
+## Version with the table_id in the URL;
+"""
 @app.route('/newrequest/<tid>')
-def newrequest(tid):
+def newrequest_tid(tid):
     table_id = int(tid)
     table = DB.get_table_id(table_id)
     table_number = table["number"]
@@ -165,6 +165,33 @@ def newrequest(tid):
     DB.add_request(table_id, time,table_number,table_owner)
     return render_template("newrequest.html",
                            table_number = table_number)
+
+"""
+
+@app.route('/newrequest/<tid>')
+def newrequest_tid(tid):
+    return render_template("newrequest_tid.html",
+                            tid = tid)
+
+
+@app.route('/newrequest', methods=['POST','GET'])
+def newrequest():
+    tid = request.form.get("tid")
+    if tid:
+       table_id = int(tid)
+       table = DB.get_table_id(table_id)
+       table_number = table["number"]
+       table_owner = table["owner"]
+       time = datetime.datetime.now()
+       DB.add_request(table_id, time,table_number,table_owner)
+       return render_template("newrequest.html",
+                           tid = True)
+    else:
+        return render_template("newrequest.html",
+                           tid = False)
+
+
+
 
 if __name__ == '__main__':
     app.run(port = 5000, debug=True)

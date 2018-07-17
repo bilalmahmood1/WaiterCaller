@@ -21,24 +21,26 @@ method="POST">
 			<input type="submit" value="Create" class="btn btn-primary">
 			</form>
 			<p> </p>
-			<table class="table table-striped">
-				<tr>
-					<th>No.</th>
-					<th>URL</th>
-					<th>Delete</th>
-				</tr>
-				{% for t in table %}
-				<form class="form" action="/account/deletetable">
-					<tr>
-						<td>{{t.number}}</td>
-						<td>{{t.url}}</td>
-						<td><input type="submit" value="Delete" class="form-control btn btn-danger"></td>
-						<input type="text" name="tableid" value="{{t._id}}" hidden>
-					</tr>
-				</form>
-				{% endfor %}
-					
-			</table>			
+      <div class="table-responsive text-center align-middle" >
+  			<table class="table table-striped">
+  				<tr>
+  					<th class="text-center">No.</th>
+  					<th class="text-center">URL</th>
+  					<th class="text-center">Delete</th>
+  				</tr>
+  				{% for t in table %}
+  				<form class="form" action="/account/deletetable">
+  					<tr>
+  						<td>{{t.number}}</td>
+  						<td>{{t.url}}</td>
+  						<td><input type="submit" value="Delete" class="btn btn-default btn-danger"></td>
+  						<input type="text" name="tableid" value="{{t._id}}" hidden>
+  					</tr>
+  				</form>
+  				{% endfor %}
+  					
+  			</table>
+      </div>			
 		</div>
 	</div>
 </div>
