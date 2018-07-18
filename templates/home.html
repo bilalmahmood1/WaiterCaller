@@ -14,13 +14,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="/login" method="POST">
+            {{loginform.csrf_token}}
             <div class="form-group">
-              <input type="text" name="email" placeholder="Email" class="form-control" autofocus>
+              {{loginform.email(placeholder="Email", class="form-control" , autofocus=1)}}
             </div>
             <div class="form-group">
-              <input type="password" name="password" placeholder="Password" class="form-control">
+              {{loginform.password(placeholder="Password", class="form-control")}}
             </div>
-            <input type="submit" value="Sign in" class="btn btn-success">
+              {{loginform.submit(value="Sign in", class="btn btn-success")}}
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -50,29 +51,109 @@
         <div class="col-md-4">
           <h2>Register now</h2>
              <form class="form-horizontal" action="/register" method="POST">
+              {{ registrationform.csrf_token }}
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="email" name="email" id="email" placeholder="Email address" class="form-control">
+                      {% if registrationform.email.errors %}
+                        <ul class="errors">
+                          {% for error in registrationform.email.errors %}
+                            <li>{{ error }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                      {{registrationform.email(placeholder="Email address", class="form-control")}}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+                      {% if registrationform.password.errors %}
+                        <ul class="errors">
+                          {% for error in registrationform.password.errors %}
+                            <li>{{ error }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                      {{registrationform.password(placeholder="Password", class="form-control")}}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="password" name="password2" id="password2" placeholder="Confirm password" class="form-control">
+                      {% if registrationform.password2.errors %}
+                        <ul class="errors">
+                          {% for error in registrationform.password2.errors %}
+                            <li>{{ error }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                      {{registrationform.password2(placeholder="Confirm password", class="form-control")}}
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="submit" value="Register" class="btn btn-primary btn-block">
+                      {{registrationform.submit(value="Register", class="btn btn-primary btn-block")}}
                     </div>
                 </div>
             </form> <!-- /form -->
         </div>
       </div>
 {% endblock %}
+
+{% block modal %}
+  {% if successRegistration %}
+    <div class="modal" id ="RegistrationModal" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Registeration Successful</h4>
+        </div>
+        <div class="modal-body">
+          <p>Login to access your account&hellip;</p>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <script type="text/javascript">
+    $('#RegistrationModal').modal('show');
+  </script>
+{% endif %}
+
+  {% if loginfail %}
+    <div class="modal" id ="LoginModal" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Login Error</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+          {% if loginform.email.errors %}
+            <ul class="errors">
+              {% for error in loginform.email.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          </p>
+          <p>
+          {% if loginform.password.errors %}
+            <ul class="errors">
+              {% for error in loginform.password.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          </p>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <script type="text/javascript">
+    $('#LoginModal').modal('show');
+  </script>
+{% endif %}
+{% endblock %}
+
+
   

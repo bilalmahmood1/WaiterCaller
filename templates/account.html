@@ -11,17 +11,27 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h2>Tables</h2>
-			<h3>Add new Table</h3>
+			<h2>Add new Table</h2>
 			<form class="form-inline" action="/account/createtable"
 method="POST">
-			<input type="text" name="tablenumber"
-			placeholder="Table number or name" class="form-control">
-      <p></p>
-			<input type="submit" value="Create" class="btn btn-primary">
+        {% if createtableform.tablenumber.errors %}
+        <ul class="errors">
+        {% for error in createtableform.tablenumber.errors %}
+        <li>{{error}}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+      {{createtableform.csrf_token}}
+    <div class="form-group" style="padding-right:15px">
+			{{createtableform.tablenumber(placeholder="Table number or name", class="form-control")}}
+    </div>
+    <div class="form-group" style="padding-right:15px">
+      {{createtableform.submit(value="Create", class=" form-control btn btn-default btn-primary")}}
+    </div>
 			</form>
-			<p> </p>
-      <div class="table-responsive text-center align-middle" >
+			
+      <h2 style="padding-top:30px">Current Tables</h2>
+      <div class="table-responsive text-center align-middle" style="padding-top:20px">
   			<table class="table table-striped">
   				<tr>
   					<th class="text-center">No.</th>
@@ -30,10 +40,13 @@ method="POST">
   				</tr>
   				{% for t in table %}
   				<form class="form" action="/account/deletetable">
+            {{deletetableform.csrf_token}}
   					<tr>
   						<td>{{t.number}}</td>
   						<td>{{t.url}}</td>
-  						<td><input type="submit" value="Delete" class="btn btn-default btn-danger"></td>
+  						<td>
+                {{deletetableform.submit(value="Delete", class="btn btn-default btn-danger")}}
+              </td>
   						<input type="text" name="tableid" value="{{t._id}}" hidden>
   					</tr>
   				</form>
