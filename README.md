@@ -1,4 +1,4 @@
-# WaiterCaller
+# Simple Waiter Calling App for Restaurant owners
 Simple Waiter caller App that allows restaurant owners to use technology to know when their customers need a waiter. 
 The restuarant owner places a small url on each table which a customer makes a request on to call a waiter. Each
 request is logged on the dashboard that is visible to the restaurant owner. 
@@ -23,6 +23,10 @@ Below are screen shots of the application
 <p align="center">
   <img src="demo/dashboard.png" width="800"/>
 </p>
+
+Sources:
+* Gareth Dwyer-Flask By Example_ Unleash the full potential of the Flask web framework by creating simple yet powerful web applications-Packt Publishing (2016)
+
 
 
 
