@@ -6,7 +6,6 @@ Created on Thu Jun 28 20:49:48 2018
 
 @author: bilal
 """
-
 from flask import Flask
 from flask import render_template
 from flask.ext.login import LoginManager
@@ -18,7 +17,6 @@ from flask import redirect
 from flask import url_for
 from flask import request
 
-from mockdbhelper import MockDBHelper as DBHelper
 from user import User
 import config
 from passwordhelper import PasswordHelper as PHelper
@@ -36,6 +34,13 @@ app = Flask(__name__)
 app.secret_key = 'ae+4YjO+l+GMTjsMPu+JNpFb4g55YbGgGSfIBt57mNWbiB/PF7kNGQQ4KCqiCkSrCAmVGMvku00GuJoMkFV3xTaAGA+5/f4Bqye'
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+if config.test:
+    from mockdbhelper import MockDBHelper as DBHelper
+else:
+    from dbhelper import DBHelper
+
 
 DB = DBHelper()
 PH = PHelper()
@@ -56,8 +61,6 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def unauthorized():
     return render_template("unauthorized.html")
-
-
 
 @app.route("/")
 def home():
@@ -183,7 +186,7 @@ def account_createtable():
 @app.route("/account/deletetable")
 @login_required
 def account_deletetable():
-    tableid = int(request.args.get("tableid"))
+    tableid = request.args.get("tableid")
     DB.delete_table(tableid)
     return redirect(url_for('account'))
 
@@ -192,7 +195,7 @@ def account_deletetable():
 @app.route("/dashboard/resolve")
 @login_required
 def dashboard_resolve():
-    requestid = int(request.args.get("request_id"))
+    requestid = request.args.get("request_id")
     DB.delete_request(requestid)
     return redirect(url_for('dashboard'))
 
@@ -208,7 +211,7 @@ def newrequest_tid(tid):
 def newrequest():
     tid = request.form.get("tid")
     if tid:
-       table_id = int(tid)
+       table_id = tid
        table = DB.get_table_id(table_id)
        table_number = table["number"]
        table_owner = table["owner"]
@@ -219,8 +222,6 @@ def newrequest():
     else:
         return render_template("newrequest.html",
                            tid = False)
-
-
 
 
 if __name__ == '__main__':

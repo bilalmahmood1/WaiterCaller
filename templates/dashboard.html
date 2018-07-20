@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block metarefresh %} 
-	<meta http-equiv="refresh" content="10">
+	<meta http-equiv="refresh" content="5">
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,6 @@
 		<p>View all patron requests below</p>
 	</div>
 </div>
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -41,7 +40,7 @@
 						  </div>
 						</div>
 						</td>
-						<input type="text" name="request_id" value="{{request._id_request}}" hidden>
+						<input type="text" name="request_id" value="{{request._id}}" hidden>
 						<td>
 							{{resolverequestform.submit(value="Resolve",class="btn btn-default btn-primary")}}
 						</td>
